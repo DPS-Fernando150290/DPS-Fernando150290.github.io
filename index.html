@@ -1,42 +1,156 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Propuestas Fernando</title>
   <style>
+    :root{
+      --accent:#4A90E2;
+      --bg:#f5f5f5;
+      --card:#ffffff;
+      --text:#222;
+    }
+
+    *{box-sizing:border-box}
     body {
       font-family: Arial, sans-serif;
-      background: #f5f5f5;
+      background:var(--bg);
       margin: 0;
-      padding: 0;
-      text-align: center;
+      color:var(--text);
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
     }
 
-    header {
-      background: #4A90E2;
-      color: white;
-      padding: 40px 20px;
+    header{
+      background:var(--accent);
+      color:white;
+      padding:24px 20px;
+    }
+    header h1{margin:0; font-size:1.25rem}
+    header p{margin:6px 0 0; opacity:.95}
+
+    /* Layout principal: sidebar + contenido */
+    .container{
+      display:flex;
+      gap:20px;
+      width:100%;
+      max-width:1100px;
+      margin:24px auto;
+      padding:0 16px 40px;
+      align-items:flex-start;
     }
 
-    h1 {
-      margin: 0;
+    /* Sidebar (navegador) */
+    nav.sidebar{
+      width:260px;
+      min-width:200px;
+      background:var(--card);
+      border-radius:10px;
+      box-shadow:0 6px 18px rgba(0,0,0,0.06);
+      padding:12px;
+      height:fit-content;
+      position:sticky;
+      top:20px;
+      align-self:flex-start;
+    }
+    nav.sidebar h3{
+      margin:6px 0 12px;
+      font-size:1rem;
+    }
+    ul.book-list{
+      list-style:none;
+      padding:0;
+      margin:0;
+    }
+    .book-item{
+      display:flex;
+      gap:12px;
+      padding:10px;
+      border-radius:8px;
+      cursor:pointer;
+      align-items:center;
+    }
+    .book-item:hover{background:rgba(0,0,0,0.03)}
+    .book-item.active{
+      background:linear-gradient(90deg,var(--accent),#2f7ad6);
+      color:white;
+    }
+    .book-thumb{
+      width:44px;
+      height:60px;
+      border-radius:4px;
+      background:linear-gradient(180deg,rgba(0,0,0,0.06),rgba(0,0,0,0.03));
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:bold;
+      font-size:.8rem;
+      color:var(--text);
+    }
+    .book-item.active .book-thumb{opacity:0.95}
+    .book-meta{ text-align:left; flex:1; }
+    .book-title{ font-weight:700; margin:0; font-size:0.95rem; }
+    .book-author{ margin:2px 0 0; font-size:0.85rem; opacity:.85 }
+
+    /* Area de contenido */
+    main.content{
+      flex:1;
+      min-width:0;
+    }
+    .card{
+      background:var(--card);
+      padding:20px;
+      border-radius:10px;
+      box-shadow:0 6px 18px rgba(0,0,0,0.06);
+    }
+    .book-header{
+      display:flex;
+      gap:20px;
+      align-items:flex-start;
+    }
+    .cover-large{
+      width:140px;
+      height:200px;
+      border-radius:6px;
+      background:linear-gradient(180deg,rgba(0,0,0,0.06),rgba(0,0,0,0.03));
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:700;
+      font-size:.9rem;
+      color:var(--text);
+      flex-shrink:0;
+    }
+    .book-info h2{ margin:0 0 8px; }
+    .book-info p{ margin:0 0 12px; color:#444 }
+
+    .read-btn{
+      display:inline-block;
+      padding:8px 14px;
+      background:var(--accent);
+      color:white;
+      border-radius:8px;
+      text-decoration:none;
+      font-weight:600;
     }
 
-    section {
-      max-width: 800px;
-      margin: 40px auto;
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    footer{
+      margin-top:auto;
+      padding:18px 20px;
+      background:#222;
+      color:white;
+      text-align:center;
+      font-size:0.9rem;
     }
 
-    footer {
-      margin-top: 40px;
-      padding: 20px;
-      background: #333;
-      color: white;
+    /* Responsive: en móvil el sidebar pasa arriba */
+    @media (max-width:800px){
+      .container{flex-direction:column; padding-bottom:20px}
+      nav.sidebar{position:relative; top:0; width:100%}
+      .book-header{flex-direction:column; align-items:center}
+      .cover-large{width:120px;height:170px}
     }
   </style>
 </head>
@@ -44,24 +158,162 @@
 
 <header>
   <h1>Dead Poet Society</h1>
-  <p>Libros propuestos por Fernando:</p>
+  <p>Libros propuestos por Fernando</p>
 </header>
 
-<section>
-  <h2>Sobre mí</h2>
-  <p>Aquí puedes escribir una breve descripción sobre ti, tus proyectos, o lo que quieras mostrar.</p>
+<div class="container">
+  <!-- Sidebar / Navegador -->
+  <nav class="sidebar" aria-label="Navegación de libros">
+    <h3>Lista de libros</h3>
+    <ul class="book-list" id="bookList">
+      <!-- Items generados por JS si quieres; aqui van ejemplos estáticos -->
+      <li class="book-item" data-id="1" tabindex="0" role="button" aria-pressed="false">
+        <div class="book-thumb">1</div>
+        <div class="book-meta">
+          <p class="book-title">El club de los poetas muertos</p>
+          <p class="book-author">N. Author</p>
+        </div>
+      </li>
 
-  <h2>Mis redes</h2>
-  <ul style="list-style:none; padding:0;">
-    <li><a href="#" target="_blank">Instagram</a></li>
-    <li><a href="#" target="_blank">GitHub</a></li>
-    <li><a href="#" target="_blank">LinkedIn</a></li>
-  </ul>
-</section>
+      <li class="book-item" data-id="2" tabindex="0" role="button" aria-pressed="false">
+        <div class="book-thumb">2</div>
+        <div class="book-meta">
+          <p class="book-title">Matar a un ruiseñor</p>
+          <p class="book-author">Harper Lee</p>
+        </div>
+      </li>
+
+      <li class="book-item" data-id="3" tabindex="0" role="button" aria-pressed="false">
+        <div class="book-thumb">3</div>
+        <div class="book-meta">
+          <p class="book-title">1984</p>
+          <p class="book-author">George Orwell</p>
+        </div>
+      </li>
+
+      <li class="book-item" data-id="4" tabindex="0" role="button" aria-pressed="false">
+        <div class="book-thumb">4</div>
+        <div class="book-meta">
+          <p class="book-title">Cien años de soledad</p>
+          <p class="book-author">Gabriel García Márquez</p>
+        </div>
+      </li>
+
+      <li class="book-item" data-id="5" tabindex="0" role="button" aria-pressed="false">
+        <div class="book-thumb">5</div>
+        <div class="book-meta">
+          <p class="book-title">El extranjero</p>
+          <p class="book-author">Albert Camus</p>
+        </div>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- Contenido principal -->
+  <main class="content">
+    <div class="card" id="bookCard">
+      <!-- Contenido que cambia según libro seleccionado -->
+      <div class="book-header">
+        <div class="cover-large" id="cover">1</div>
+        <div class="book-info">
+          <h2 id="title">El club de los poetas muertos</h2>
+          <p id="author">N. Author</p>
+          <p id="desc">Una novela inspiradora sobre un profesor poco convencional que anima a sus alumnos a pensar por sí mismos y a seguir sus pasiones. Ideal para reflexionar sobre la libertad y la educación.</p>
+          <p><a id="moreLink" class="read-btn" href="#" target="_blank" rel="noopener">Ver más</a></p>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
 
 <footer>
-  © 2025 | Tu Nombre
+  © 2025 | Fernando
 </footer>
+
+<script>
+  // Datos de ejemplo — edítalos con tus libros reales
+  const books = {
+    1: {
+      title: "El club de los poetas muertos",
+      author: "N. Author",
+      desc: "Una novela inspiradora sobre un profesor poco convencional que anima a sus alumnos a pensar por sí mismos y a seguir sus pasiones.",
+      link: "#",
+      coverText: "1"
+    },
+    2: {
+      title: "Matar a un ruiseñor",
+      author: "Harper Lee",
+      desc: "Clásico sobre la moral, la justicia y la infancia en el sur de Estados Unidos visto a través de los ojos de Scout Finch.",
+      link: "#",
+      coverText: "2"
+    },
+    3: {
+      title: "1984",
+      author: "George Orwell",
+      desc: "Distopía política que explora vigilancia, manipulación de la verdad y control totalitario. Fundamental y perturbador.",
+      link: "#",
+      coverText: "3"
+    },
+    4: {
+      title: "Cien años de soledad",
+      author: "Gabriel García Márquez",
+      desc: "Saga familiar mágica y épica que mezcla realismo mágico con la historia de América Latina.",
+      link: "#",
+      coverText: "4"
+    },
+    5: {
+      title: "El extranjero",
+      author: "Albert Camus",
+      desc: "Novela existencialista que sigue a Meursault y su distante visión de la vida y la muerte.",
+      link: "#",
+      coverText: "5"
+    }
+  };
+
+  // Elementos DOM
+  const bookList = document.getElementById('bookList');
+  const cover = document.getElementById('cover');
+  const title = document.getElementById('title');
+  const author = document.getElementById('author');
+  const desc = document.getElementById('desc');
+  const moreLink = document.getElementById('moreLink');
+
+  // Inicializa: selecciona el primer libro
+  function selectBook(id, focus=false){
+    // actualizar lista: quitar active y aria-pressed
+    document.querySelectorAll('.book-item').forEach(item=>{
+      item.classList.toggle('active', item.dataset.id === String(id));
+      item.setAttribute('aria-pressed', item.dataset.id === String(id));
+    });
+
+    const b = books[id];
+    if(!b) return;
+    cover.textContent = b.coverText || '';
+    title.textContent = b.title;
+    author.textContent = b.author;
+    desc.textContent = b.desc;
+    moreLink.href = b.link || '#';
+
+    if(focus){
+      // desplazar el contenido a la vista en móviles
+      document.querySelector('main.content').scrollIntoView({behavior:'smooth'});
+    }
+  }
+
+  // Añade listeners a cada item
+  bookList.querySelectorAll('.book-item').forEach(item=>{
+    item.addEventListener('click', ()=> selectBook(item.dataset.id, true));
+    item.addEventListener('keydown', (e)=>{
+      if(e.key === 'Enter' || e.key === ' '){
+        e.preventDefault();
+        item.click();
+      }
+    });
+  });
+
+  // Selección por defecto
+  selectBook(1);
+</script>
 
 </body>
 </html>
